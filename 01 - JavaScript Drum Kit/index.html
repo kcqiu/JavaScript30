@@ -7,7 +7,7 @@
 </head>
 <body>
 
-
+//use keycode.info
   <div class="keys">
     <div data-key="65" class="key">
       <kbd>A</kbd>
@@ -59,6 +59,33 @@
 
 <script>
 
+  function playSound(event){
+    const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
+  const key = document.querySelector(`.key[data-key="${event.keyCode}"]`); //note here using .key to select class of key. 
+  console.log(audio);
+  // this will top calling audio to play if the key pressed is null
+  if(!audio) return; 
+  audio.currentTime = 0; //if keys hit in sucession, it will rewind to the start. 
+  audio.play();
+  key.classList.add('playing'); //key.addClass('playing'); ---> using jquery;.  here we are adding the class playing onto the div that we select from listening to each key. 
+  console.log(key);
+  // setTimeout(function(){
+  // key.classList.remove('playing');
+
+  // }, 200)
+  };
+window.addEventListener('keydown', playSound);
+
+//event listener for end of transition
+function removeTransition(event){
+  if(event.propertyName !== 'transform') return; //skip if it's not a transform;
+  this.classList.remove('playing');
+}
+
+const keys  = document.querySelectorAll('.key');
+keys.forEach(function(key) {
+  key.addEventListener('transitionend', removeTransition);
+})
 </script>
 
 
